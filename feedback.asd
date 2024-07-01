@@ -9,4 +9,8 @@
                #:cl-glfw3)
   :pathname "src"
   :components ((:file "package")
-               (:file "feedback")))
+               (:file "feedback")
+               (:file "geom")
+               (:file "gl")
+               (:file "math")
+               (:file "shaders")))
