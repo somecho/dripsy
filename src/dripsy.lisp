@@ -23,7 +23,9 @@
    (initialized :initform nil
                 :accessor initialized)
    (frame-num :initform 0
-              :accessor frame-num)))
+              :accessor frame-num)
+   (default-shader :initform nil
+                   :accessor default-shader)))
 
 
 ;; GENERICS
@@ -75,7 +77,8 @@
                       (gl-version-major gl-version-major)
                       (gl-version-minor gl-version-minor)
                       (initialized initialized)
-                      (frame-num frame-num))
+                      (frame-num frame-num)
+                      (default-shader default-shader))
          ,app-name
        (unless initialized
          (%glfw:init)
@@ -104,8 +107,8 @@
               (declare (ignore window))
               (on-resized ,app-name w h)
               (gl:viewport 0 0 w h)))
-           (initialize-default-shader-program)
-           (gl:use-program drip:*default-shader-program*)
+           (setf default-shader (initialize-default-shader-program))
+           (gl:use-program default-shader)
            (setup ,app-name)
            (loop until (glfw:window-should-close-p window)
                  do (incf frame-num)
