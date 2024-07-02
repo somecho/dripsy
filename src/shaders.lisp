@@ -1,4 +1,4 @@
-(in-package #:feedback)
+(in-package #:dripsy)
 
 (defparameter *default-shader-program* nil)
 
@@ -24,8 +24,8 @@ variable *default-shader-program*. This shader is used for standard rendering."
   (let ((vs (gl:create-shader :vertex-shader))
         (fs (gl:create-shader :fragment-shader))
         (shader nil))
-    (gl:shader-source vs fb:base-vertex-shader)
-    (gl:shader-source fs fb:base-fragment-shader)
+    (gl:shader-source vs base-vertex-shader)
+    (gl:shader-source fs base-fragment-shader)
     (gl:compile-shader vs)
     (gl:compile-shader fs)
     (setf shader (gl:create-program))
@@ -34,4 +34,4 @@ variable *default-shader-program*. This shader is used for standard rendering."
     (gl:link-program shader)
     (gl:delete-shader vs)
     (gl:delete-shader fs)
-    (defparameter *default-shader-program* shader)))
+    (setf *default-shader-program* shader)))

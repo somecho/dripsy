@@ -1,8 +1,8 @@
-(in-package #:feedback)
+(in-package #:dripsy)
 
 (defun vec-mul-scalar (vec f)
   "Returns an array of all elements in VEC multiplied by F"
-  (declare (type (simple-array (or float fixnum)) vec))
+  (declare (type (simple-array (or single-float fixnum)) vec))
   (declare (type (or float fixnum) f))
   (let* ((vec-length (length vec))
          (output (make-array vec-length)))

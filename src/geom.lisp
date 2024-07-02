@@ -1,4 +1,4 @@
-(in-package #:feedback)
+(in-package #:dripsy)
 
 (define-condition polygon-has-less-than-three-sides (error) ()
   (:report
@@ -25,6 +25,7 @@ RADIUS."
 (defun unit-polygon (n)
   "Returns a flat array of 3d-points of a N-sided polygon with a radius of 1."
   (polygon n 1.0))
+
 
 (defvar *unit-triangle-points* (polygon 3 1.0))
 

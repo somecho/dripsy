@@ -1,7 +1,14 @@
-(defpackage #:feedback
+(defpackage #:dripsy
   (:use #:cl)
-  (:nicknames :fb)
-  (:export :app
+  (:nicknames :drip)
+  (:export ;; app
+           :make
+           :setup
+           :on-key-pressed
+           :on-resized
+           :width
+           :height
+           :frame-num
 
            ;; shaders
            :base-vertex-shader
