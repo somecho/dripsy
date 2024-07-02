@@ -104,6 +104,8 @@
               (declare (ignore window))
               (on-resized ,app-name w h)
               (gl:viewport 0 0 w h)))
+           (initialize-default-shader-program)
+           (gl:use-program drip:*default-shader-program*)
            (setup ,app-name)
            (loop until (glfw:window-should-close-p window)
                  do (incf frame-num)

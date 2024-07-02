@@ -16,8 +16,7 @@
     (setf *vao* (gl:gen-vertex-array))
     (gl:bind-vertex-array *vao*)
     (gl:enable-vertex-attrib-array 0)
-    (gl:vertex-attrib-pointer 0 3 :float :false 0 0)
-    (gl:use-program drip:*default-shader-program*)))
+    (gl:vertex-attrib-pointer 0 3 :float :false 0 0)))
 
 (make-instance 'hello-triangle :width 512
                                :height 512)

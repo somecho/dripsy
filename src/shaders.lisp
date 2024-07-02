@@ -34,4 +34,5 @@ variable *default-shader-program*. This shader is used for standard rendering."
     (gl:link-program shader)
     (gl:delete-shader vs)
     (gl:delete-shader fs)
-    (setf *default-shader-program* shader)))
+    (setf *default-shader-program* shader)
+    shader))
