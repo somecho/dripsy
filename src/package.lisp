@@ -3,11 +3,13 @@
   (:nicknames :drip)
   (:export ;; public app vars
            :make
-           :on-key-pressed
-           :on-resized
            :width
            :height
            :frame-num
+
+           ;; app callbacks
+           :on-key-pressed
+           :on-resized
 
            ;; public draw API
            :eq-tri

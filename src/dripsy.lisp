@@ -32,32 +32,20 @@
 (defgeneric setup (dripsy-app)
   (:documentation "This is called once at the beginning before the draw loop
   begins. To access properties like width, you will need to use an accessor
-  function."))
+  function.")
+  (:method ((dripsy-app base-app))))
 
 
 (defgeneric on-key-pressed (dripsy-app key)
   (:documentation "The callback for the dripsy app that is called when a key is
-  pressed."))
+  pressed.")
+  (:method ((dripsy-app base-app) key)))
 
 
 (defgeneric on-resized (dripsy-app width height)
   (:documentation "The callback for the dripsy app that is called when the
-  window is resized."))
-
-
-;; DEFAULT DEFMETHODS
-
-
-(defun make-setup (app-name)
-  `(defmethod setup ((,app-name ,app-name))))
-
-
-(defun make-define-on-key-pressed (app-name)
-  `(defmethod on-key-pressed ((,app-name ,app-name) key)))
-
-
-(defun make-define-on-resized (app-name)
-  `(defmethod on-resized ((,app-name ,app-name) width height)))
+  window is resized.")
+  (:method ((dripsy-app base-app) width height)))
 
 
 ;; DRIPSY APP
@@ -139,7 +127,4 @@
 
 (defmacro make (app-name &rest body)
   `(progn ,(make-define-app-class app-name)
-          ,(make-setup app-name)
-          ,(make-define-on-key-pressed app-name)
-          ,(make-define-on-resized app-name)
           ,(make-define-initialize-class app-name body)))
