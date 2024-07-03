@@ -37,3 +37,21 @@ variable *default-shader-program*. This shader is used for standard rendering."
     (gl:delete-shader fs)
     (setf *default-shader-program* shader)
     shader))
+
+(defun create-default-shader-program ()
+  "Creates a shader program from base default shaders. This shader is used for
+standard rendering."
+  (let ((vs (gl:create-shader :vertex-shader))
+        (fs (gl:create-shader :fragment-shader))
+        (shader nil))
+    (gl:shader-source vs base-vertex-shader)
+    (gl:shader-source fs base-fragment-shader)
+    (gl:compile-shader vs)
+    (gl:compile-shader fs)
+    (setf shader (gl:create-program))
+    (gl:attach-shader shader vs)
+    (gl:attach-shader shader fs)
+    (gl:link-program shader)
+    (gl:delete-shader vs)
+    (gl:delete-shader fs)
+    shader))

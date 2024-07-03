@@ -10,11 +10,17 @@
            :height
            :frame-num
 
+           ;; renderer
+           :renderer
+           :*renderer*
+           :triangle
+
            ;; shaders
            :base-vertex-shader
            :base-fragment-shader
            :*default-shader-program*
            :initialize-default-shader-program
+           :create-default-shader-program
 
            ;;gl utils
            :gen-gl-array-buffer

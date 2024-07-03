@@ -14,4 +14,5 @@
                (:file "geom")
                (:file "gl")
                (:file "math")
+               (:file "renderer")
                (:file "shaders")))
