@@ -5,8 +5,9 @@
 (defvar base-vertex-shader "
 #version 330
 layout (location = 0) in vec3 aPos;
+uniform mat4 modelViewProjectionMatrix;
 void main(){
-  gl_Position = vec4(aPos.x,aPos.y,aPos.z, 1.0);
+  gl_Position = vec4(aPos, 1.0) * modelViewProjectionMatrix;
 }")
 
 (defvar base-fragment-shader "
