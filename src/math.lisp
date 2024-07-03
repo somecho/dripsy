@@ -57,3 +57,28 @@ the arguments X, Y and Z."
           do (setf (aref output iz)
                    (coerce (+ (aref array iz) z) 'single-float)))
     output))
+
+
+(defun flat-repeat (array ntimes)
+  (let* ((size (array-total-size array))
+         (output (make-array (* size ntimes))))
+    (loop for i from 0 below ntimes
+          do (loop for j from 0 below size
+                   for index = (+ j (* i size))
+                   do (setf (aref output index) (aref array j))))
+    output))
+
+
+(defun interlace-arrays (arr1 arr2 n1 n2)
+  (let* ((size (/(array-total-size arr1) n1))
+         (output (make-array (* size (+ n1 n2)))))
+    (loop for i from 0 below size
+          do (loop for j from 0 below n1
+                   for index = (+ j (* i (+ n1 n2)))
+                   for ji = (+ (* i n1) j)
+                   do (setf (aref output index) (aref arr1 ji)))
+          do (loop for j from 0 below n2
+                   for index = (+ j n1 (* i (+ n1 n2)))
+                   for ji = (+ (* i n2) j)
+                   do (setf (aref output index) (aref arr2 ji))))
+    output))
