@@ -117,3 +117,23 @@ use."
                    (coerce (nth jy points) 'single-float))
           do (setf (aref line-vertices iz) 0.0))
     line-vertices))
+
+
+(defun points-array-from (x y &optional points)
+  (let* ((num-points (-> (length points) (/ 2) (+ 1)))
+         (line-vertices (make-array (* 3 num-points))))
+    (setf (aref line-vertices 0) (coerce x 'single-float))
+    (setf (aref line-vertices 1) (coerce y 'single-float))
+    (setf (aref line-vertices 2) 0.0)
+    (loop for i from 1 below num-points
+          for ix = (* i 3)
+          for iy = (-> (* i 3) (+ 1))
+          for iz = (-> (* i 3) (+ 2))
+          for jx = (-> i (- 1) (* 2))
+          for jy = (-> i (- 1) (* 2) (+ 1))
+          do (setf (aref line-vertices ix)
+                   (coerce (nth jx points) 'single-float))
+          do (setf (aref line-vertices iy)
+                   (coerce (nth jy points) 'single-float))
+          do (setf (aref line-vertices iz) 0.0))
+    line-vertices))

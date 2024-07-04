@@ -12,6 +12,8 @@
            :on-resized
 
            ;; public draw API
+           :point
+           :points
            :line
            :eq-tri
            :set-color

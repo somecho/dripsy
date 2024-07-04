@@ -188,3 +188,21 @@ to its points is RADIUS."
     (write-array-buffer *renderer* line-array)
     (gl:draw-arrays :line-strip 0 num-vertices)))
 
+
+(defun point (x y &optional (z 0.0))
+  "Draws a single point at (x,y)."
+  (before-render *renderer*)
+  (write-array-buffer *renderer* `#(,(coerce x 'single-float)
+                                    ,(coerce y 'single-float)
+                                    ,(coerce z 'single-float)))
+  (gl:draw-arrays :points 0 1))
+
+
+(defun points (x y &rest points)
+  "Draws either a single point or multiple points. More points can be given in
+the &rest argument as flat pairs."
+  (before-render *renderer*)
+  (let ((num-points (-> (length points)(/ 2)(+ 1)))
+        (pts-array (points-array-from x y points)))
+    (write-array-buffer *renderer* pts-array)
+    (gl:draw-arrays :points 0 num-points)))
