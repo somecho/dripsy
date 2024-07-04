@@ -51,7 +51,10 @@
     :accessor projection-matrix)
    (mvp-matrix
     :initform nil
-    :accessor mvp-matrix)))
+    :accessor mvp-matrix)
+   (use-fill?
+    :initform t
+    :accessor use-fill?)))
 
 
 (defmethod initialize-instance :after ((renderer renderer) &key)
@@ -151,17 +154,30 @@ geometries."
                           (gen-gl-array-buffer vertex-data)))))))
 
 
+(defun no-fill! ()
+  "Tells the renderer to draw shapes without fill."
+  (setf (use-fill? *renderer*) nil))
+
+
+(defun use-fill! ()
+  "Tells the renderer to draw shapes with fill."
+  (setf (use-fill? *renderer*) t))
+
+
 (declaim (ftype (function (gl-num gl-num gl-num)) eq-tri))
 (defun eq-tri (x y radius)
   "Draws an equilateral triangle with center (X,Y). The length from the center
 to its points is RADIUS."
   (with-accessors ((vertices vertices)
                    (vertex-attrib-location vertex-attrib-location)
-                   (default-shader default-shader))
+                   (default-shader default-shader)
+                   (use-fill? use-fill?))
       *renderer*
     (before-render *renderer*)
     (let* ((scaled (vec-mul-scalar *unit-triangle-points* radius))
            (transposed (transpose-points-array scaled x y))
            (current-bound-attrib (gl:get-integer :vertex-array-binding)))
       (write-array-buffer *renderer* transposed))
-    (gl:draw-arrays :triangles 0 3)))
+    (if use-fill?
+    (gl:draw-arrays :triangles 0 3)
+    (gl:draw-arrays :line-loop 0 3))))

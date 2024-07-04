@@ -13,4 +13,6 @@
 
            ;; public draw API
            :eq-tri
-           :set-color))
+           :set-color
+           :use-fill!
+           :no-fill!))
