@@ -310,3 +310,33 @@ radius is the length from the center to its points."
     (if (use-fill? *renderer*)
         (gl:draw-arrays :triangle-fan 0 (circle-resolution *renderer*))
         (gl:draw-arrays :line-loop 0 (circle-resolution *renderer*)))))
+
+(defun save-screen (w h filename)
+  (let* ((num-pixels (* w h))
+         (size (* num-pixels 4))
+         (png (make-instance 'zpng:pixel-streamed-png
+                             :color-type :truecolor-alpha
+                             :width w
+                             :height h)))
+    (cffi:with-foreign-object (array '%gl:ubyte size)
+      (%gl:read-pixels 0 0 w h :rgba :unsigned-byte array)
+      (with-open-file (stream filename
+                              :direction :output
+                              :if-exists :supersede
+                              :if-does-not-exist :create
+                              :element-type '(unsigned-byte 8))
+        (zpng:start-png png stream)
+        (loop for y from 0 below h
+              do (loop for x from 0 below w
+                       for i = (+ (* (- h y) w) x)
+                       for r = (* i 4)
+                       for g = (+ 1 (* i 4))
+                       for b = (+ 2 (* i 4))
+                       for a = (+ 3 (* i 4))
+                       do (zpng:write-pixel
+                           (list
+                            (cffi:mem-aref array '%gl:ubyte r)
+                            (cffi:mem-aref array '%gl:ubyte g)
+                            (cffi:mem-aref array '%gl:ubyte b)
+                            (cffi:mem-aref array '%gl:ubyte a)) png)))
+        (zpng:finish-png png)))))

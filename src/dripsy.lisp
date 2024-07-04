@@ -53,7 +53,9 @@
 
 (defun make-draw-method (app-name body)
   `(defmethod draw ((,app-name ,app-name))
-     (with-accessors ((frame-num frame-num))
+     (with-accessors ((frame-num frame-num)
+                      (width width)
+                      (height height))
          ,app-name
        (progn ,@body))))
 

@@ -137,3 +137,9 @@ use."
                    (coerce (nth jy points) 'single-float))
           do (setf (aref line-vertices iz) 0.0))
     line-vertices))
+
+
+;;
+
+
+(defun half (n) (/ n 2))

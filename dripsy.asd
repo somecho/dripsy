@@ -2,13 +2,14 @@
   :description "Creative Coding Framework"
   :author "Somē Cho <itssomicho@gmail.com>"
   :license  "MIT"
-  :version "0.0.11"
+  :version "0.0.12"
   :serial t
   :depends-on (#:alexandria
                #:cl-opengl
                #:cl-glfw3
                #:glkit
-               #:arrows)
+               #:arrows
+               #:zpng)
   :pathname "src"
   :components ((:file "package")
                (:file "math")

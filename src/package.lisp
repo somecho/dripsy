@@ -20,8 +20,11 @@
            :rect
            :polygon
            :circle
+           :save-screen
 
            :set-color
            :set-circle-resolution
            :use-fill!
-           :no-fill!))
+           :no-fill!
+
+           :half))
