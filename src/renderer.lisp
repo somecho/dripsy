@@ -263,3 +263,18 @@ H."
     (if (use-fill? *renderer*)
         (gl:draw-arrays :triangle-fan 0 4)
         (gl:draw-arrays :line-loop 0 4))))
+
+
+(defun polygon (x y radius sides)
+  (before-render *renderer*)
+  (if (= sides 3)
+      (eq-tri x y radius)
+      (let* ((unit-points-array (if (< sides 7)
+                                    (get-unit-polygon-points sides)
+                                    (unit-polygon sides)))
+             (scaled (vec-mul-scalar unit-points-array radius))
+             (transposed (transpose-points-array scaled x y)))
+        (write-array-buffer *renderer* transposed)
+        (if (use-fill? *renderer*)
+            (gl:draw-arrays :triangle-fan 0 sides)
+            (gl:draw-arrays :line-loop 0 sides)))))

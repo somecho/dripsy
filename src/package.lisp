@@ -18,6 +18,7 @@
            :eq-tri
            :tri
            :rect
+           :polygon
            :set-color
            :use-fill!
            :no-fill!))
