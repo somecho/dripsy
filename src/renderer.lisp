@@ -132,6 +132,9 @@ position data has changed."
     (gl:vertex-attrib-pointer 1 4 :float :false stride (* 3  fsize))))
 
 
+;; Renderer State Functions
+
+
 (declaim (ftype (function (u8 u8 u8 u8)) set-color))
 (defun set-color (r g b &optional (a 255.0))
   "Sets the color that the renderer will use to render the subsequent
@@ -164,29 +167,7 @@ geometries."
   (setf (use-fill? *renderer*) t))
 
 
-(declaim (ftype (function (gl-num gl-num gl-num)) eq-tri))
-(defun eq-tri (x y radius)
-  "Draws an equilateral triangle with center (X,Y). The length from the center
-to its points is RADIUS."
-  (with-accessors ((use-fill? use-fill?))
-      *renderer*
-    (before-render *renderer*)
-    (let* ((scaled (vec-mul-scalar *unit-triangle-points* radius))
-           (transposed (transpose-points-array scaled x y)))
-      (write-array-buffer *renderer* transposed))
-    (if use-fill?
-    (gl:draw-arrays :triangles 0 3)
-    (gl:draw-arrays :line-loop 0 3))))
-
-
-(defun line (x1 y1 x2 y2 &rest points)
-  "Draws a line with points (x1,y1) to (x2,y2). More points can be given in the
-&rest arguments but must be given in pairs."
-  (before-render *renderer*)
-  (let ((num-vertices (-> (length points) (/ 2) (+ 2)))
-        (line-array (line-array-from x1 y1 x2 y2 points)))
-    (write-array-buffer *renderer* line-array)
-    (gl:draw-arrays :line-strip 0 num-vertices)))
+;; 2D Primitive Draw Calls
 
 
 (defun point (x y &optional (z 0.0))
@@ -206,3 +187,28 @@ the &rest argument as flat pairs."
         (pts-array (points-array-from x y points)))
     (write-array-buffer *renderer* pts-array)
     (gl:draw-arrays :points 0 num-points)))
+
+
+(defun line (x1 y1 x2 y2 &rest points)
+  "Draws a line with points (x1,y1) to (x2,y2). More points can be given in the
+&rest arguments but must be given in pairs."
+  (before-render *renderer*)
+  (let ((num-vertices (-> (length points) (/ 2) (+ 2)))
+        (line-array (line-array-from x1 y1 x2 y2 points)))
+    (write-array-buffer *renderer* line-array)
+    (gl:draw-arrays :line-strip 0 num-vertices)))
+
+
+(declaim (ftype (function (gl-num gl-num gl-num)) eq-tri))
+(defun eq-tri (x y radius)
+  "Draws an equilateral triangle with center (X,Y). The length from the center
+to its points is RADIUS."
+  (with-accessors ((use-fill? use-fill?))
+      *renderer*
+    (before-render *renderer*)
+    (let* ((scaled (vec-mul-scalar *unit-triangle-points* radius))
+           (transposed (transpose-points-array scaled x y)))
+      (write-array-buffer *renderer* transposed))
+    (if use-fill?
+    (gl:draw-arrays :triangles 0 3)
+    (gl:draw-arrays :line-loop 0 3))))
