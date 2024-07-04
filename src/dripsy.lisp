@@ -36,6 +36,9 @@
   (:method ((dripsy-app base-app))))
 
 
+(defgeneric draw (dripsy-app))
+
+
 (defgeneric on-key-pressed (dripsy-app key)
   (:documentation "The callback for the dripsy app that is called when a key is
   pressed.")
@@ -46,6 +49,13 @@
   (:documentation "The callback for the dripsy app that is called when the
   window is resized.")
   (:method ((dripsy-app base-app) width height)))
+
+
+(defun make-draw-method (app-name body)
+  `(defmethod draw ((,app-name ,app-name))
+     (with-accessors ((frame-num frame-num))
+         ,app-name
+       (progn ,@body))))
 
 
 ;; DRIPSY APP
@@ -117,7 +127,7 @@
              (progn ,@(getf blocks :setup))
              (loop until (glfw:window-should-close-p window)
                    do (incf frame-num)
-                   do (progn ,@(getf blocks :draw))
+                   do (draw ,app-name)
                    do (glfw:swap-buffers window)
                    do (glfw:poll-events))
              (glfw:destroy-window window)
@@ -127,4 +137,5 @@
 
 (defmacro make (app-name &rest body)
   `(progn ,(make-define-app-class app-name)
+          ,(make-draw-method app-name body)
           ,(make-define-initialize-class app-name body)))

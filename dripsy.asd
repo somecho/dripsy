@@ -7,7 +7,8 @@
   :depends-on (#:alexandria
                #:cl-opengl
                #:cl-glfw3
-               #:glkit)
+               #:glkit
+               #:arrows)
   :pathname "src"
   :components ((:file "package")
                (:file "dripsy")

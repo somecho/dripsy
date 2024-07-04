@@ -1,5 +1,5 @@
 (defpackage #:dripsy
-  (:use #:cl)
+  (:use #:cl #:arrows)
   (:nicknames :drip)
   (:export ;; public app vars
            :make
