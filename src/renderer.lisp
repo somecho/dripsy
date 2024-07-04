@@ -210,5 +210,21 @@ to its points is RADIUS."
            (transposed (transpose-points-array scaled x y)))
       (write-array-buffer *renderer* transposed))
     (if use-fill?
-    (gl:draw-arrays :triangles 0 3)
-    (gl:draw-arrays :line-loop 0 3))))
+        (gl:draw-arrays :triangles 0 3)
+        (gl:draw-arrays :line-loop 0 3))))
+
+
+(declaim (ftype (function (gl-num gl-num gl-num gl-num gl-num gl-num) tri)))
+(defun tri (x1 y1 x2 y2 x3 y3)
+  "Draws a triangle with points (x1,y1), (x2,y2) and (x3,y3)."
+  (before-render *renderer*)
+  (let ((tri-array `#(,(coerce x1 'single-float)
+                      ,(coerce y1 'single-float) 0.0
+                      ,(coerce x2 'single-float)
+                      ,(coerce y2 'single-float) 0.0
+                      ,(coerce x3 'single-float)
+                      ,(coerce y3 'single-float) 0.0)))
+    (write-array-buffer *renderer* tri-array)
+    (if (use-fill? *renderer*)
+        (gl:draw-arrays :triangles 0 3)
+        (gl:draw-arrays :line-loop 0 3))))

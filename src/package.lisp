@@ -16,6 +16,7 @@
            :points
            :line
            :eq-tri
+           :tri
            :set-color
            :use-fill!
            :no-fill!))

@@ -136,6 +136,23 @@
 
 
 (defmacro make (app-name &rest body)
+  "This is the main macro for creating Dripsy applications/sketches. It creates
+ a class definition with the name APP-NAME which can be later instanciated with
+ make-instance. Calling make-instance on the newly created class will start
+ Dripsy.
+
+ After the app-name, you can start to use draw functions that run every frame.
+ If you would like to use a setup function that only gets called once, you can
+ do it by using the :setup keyword like so:
+
+ (drip:make sketch
+            :setup
+            (print \"This is run once\")
+            :draw
+            (drip:point 250 250))
+
+ Note that to begin calling the draw functions again, you will need to add the
+ keyword :draw before the draw functions."
   `(progn ,(make-define-app-class app-name)
           ,(make-draw-method app-name body)
           ,(make-define-initialize-class app-name body)))
