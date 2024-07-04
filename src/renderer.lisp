@@ -189,7 +189,7 @@ geometries."
   (setf (use-fill? *renderer*) t))
 
 
-(declaim (ftype (function ((and fixnum greater-than-two-p))) set-circle-resolution))
+;; (declaim (ftype (function ((and fixnum greater-than-two-p))) set-circle-resolution))
 (defun set-circle-resolution (resolution)
   "By default, a circle has 32 points. To specify a how many points the renderer
 will draw circles with, use this method."
@@ -310,6 +310,7 @@ radius is the length from the center to its points."
     (if (use-fill? *renderer*)
         (gl:draw-arrays :triangle-fan 0 (circle-resolution *renderer*))
         (gl:draw-arrays :line-loop 0 (circle-resolution *renderer*)))))
+
 
 (defun save-screen (w h filename)
   (let* ((num-pixels (* w h))

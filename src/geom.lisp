@@ -1,7 +1,6 @@
 (in-package #:dripsy)
 
 
-(defun greater-than-two-p (n) (> n 2))
 (declaim (ftype (function ((satisfies greater-than-two-p) number)
                           points-array) polygon-points))
 (defun polygon-points (n radius)

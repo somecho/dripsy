@@ -21,6 +21,9 @@
 ;; TYPE PREDICATES
 
 
+(defun greater-than-two-p (n) (> n 2))
+
+
 (defun triplet-array-p (array)
   "Returns T if array has a size that is a multiple of 3."
   (zerop (mod (array-total-size array) 3)))
@@ -44,9 +47,9 @@
     output))
 
 
-(declaim (ftype (function (points-array gl-num gl-num (or gl-num null))
-                          points-array)
-                transpose-points-array))
+;; (declaim (ftype (function (points-array gl-num gl-num (or gl-num null))
+;;                           points-array)
+;;                 transpose-points-array))
 
 
 (defun transpose-points-array (array x y &optional (z 0))
@@ -92,8 +95,8 @@ the arguments X, Y and Z."
     output))
 
 
-(declaim (ftype (function (gl-num gl-num gl-num gl-num (or null duplet-list))
-                          points-array) line-array-from))
+;; (declaim (ftype (function (gl-num gl-num gl-num gl-num (or null duplet-list))
+;;                           points-array) line-array-from))
 (defun line-array-from (x1 y1 x2 y2 &optional points)
   "Used by the line draw call to convert points into an array that OpenGL can
 use."

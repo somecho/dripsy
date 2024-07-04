@@ -51,15 +51,6 @@
   (:method ((dripsy-app base-app) width height)))
 
 
-(defun make-draw-method (app-name body)
-  `(defmethod draw ((,app-name ,app-name))
-     (with-accessors ((frame-num frame-num)
-                      (width width)
-                      (height height))
-         ,app-name
-       (progn ,@body))))
-
-
 ;; DRIPSY APP
 
 
@@ -79,6 +70,16 @@
                 finally (return (list :setup setup
                                       :draw draw))))
     `(,@blocks)))
+
+
+(defun make-draw-method (app-name body)
+  (let ((blocks (parse-blocks body)))
+    `(defmethod draw ((,app-name ,app-name))
+       (with-accessors ((frame-num frame-num)
+                        (width width)
+                        (height height))
+           ,app-name
+         (progn ,@(getf blocks :draw))))))
 
 
 (defun make-define-app-class (app-name)
