@@ -29,6 +29,9 @@
    (vertex-attrib-location
     :initform nil
     :accessor vertex-attrib-location)
+   (index-buffer-location
+    :initform nil
+    :accessor index-buffer-location)
    (default-shader
     :initform nil
     :accessor default-shader)
@@ -60,6 +63,7 @@
 (defmethod initialize-instance :after ((renderer renderer) &key)
   (with-accessors ((vertex-buffer-location vertex-buffer-location)
                    (vertex-attrib-location vertex-attrib-location)
+                   (index-buffer-location index-buffer-location)
                    (default-shader default-shader)
                    (model-matrix model-matrix)
                    (view-matrix view-matrix)
@@ -70,6 +74,7 @@
     (setf mvp-matrix (kit.glm:matrix* model-matrix view-matrix projection-matrix))
     (setf default-shader (create-default-shader-program))
     (setf vertex-buffer-location (gl:gen-buffer))
+    (setf index-buffer-location (gl:gen-buffer))
     (setf vertex-attrib-location (gl:gen-vertex-array))))
 
 
@@ -118,6 +123,17 @@ position data has changed."
       (let ((vertex-data (interlace-arrays vertices colors 3 4)))
         (gl:buffer-data :array-buffer :dynamic-draw
                         (gen-gl-array-buffer vertex-data))))))
+
+
+(defmethod write-index-buffer ((renderer renderer) data)
+  (with-accessors ((indices indices)
+                   (index-buffer-location index-buffer-location))
+      renderer
+    (unless (equalp data indices)
+      (setf indices data)
+      (gl:bind-buffer :element-array-buffer index-buffer-location)
+      (gl:buffer-data :element-array-buffer :dynamic-draw
+                      (gen-gl-array-buffer data :type :unsigned-int)))))
 
 
 (defmethod before-render ((renderer renderer))
@@ -228,3 +244,22 @@ to its points is RADIUS."
     (if (use-fill? *renderer*)
         (gl:draw-arrays :triangles 0 3)
         (gl:draw-arrays :line-loop 0 3))))
+
+
+
+(defun rect (x y w h)
+  "Draws a rectangle with the top left corner at (x,y) of width W and height
+H."
+  (before-render *renderer*)
+  (let* ((rect-array `#(,(coerce x 'single-float)
+                       ,(coerce y 'single-float) 0.0
+                       ,(coerce (+ x w) 'single-float)
+                       ,(coerce y 'single-float) 0.0
+                       ,(coerce (+ x w) 'single-float)
+                       ,(coerce (+ y h) 'single-float) 0.0
+                       ,(coerce x 'single-float)
+                       ,(coerce (+ y h) 'single-float) 0.0)))
+    (write-array-buffer *renderer* rect-array)
+    (if (use-fill? *renderer*)
+        (gl:draw-arrays :triangle-fan 0 4)
+        (gl:draw-arrays :line-loop 0 4))))

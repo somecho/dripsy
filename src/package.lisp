@@ -17,6 +17,7 @@
            :line
            :eq-tri
            :tri
+           :rect
            :set-color
            :use-fill!
            :no-fill!))
