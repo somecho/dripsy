@@ -87,6 +87,7 @@ With this, our circle sketch looks like this:
 
 ```lisp
 (make hello-world 
+    (set-color 0 0 255)
     (circle (half width) (half height) 20))
 
 (make-instance 'hello-world)

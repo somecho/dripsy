@@ -329,7 +329,7 @@ radius is the length from the center to its points."
         (zpng:start-png png stream)
         (loop for y from 0 below h
               do (loop for x from 0 below w
-                       for i = (+ (* (- h y) w) x)
+                       for i = (+ (* (- h y 1) w) x)
                        for r = (* i 4)
                        for g = (+ 1 (* i 4))
                        for b = (+ 2 (* i 4))
