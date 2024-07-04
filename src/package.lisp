@@ -19,6 +19,9 @@
            :tri
            :rect
            :polygon
+           :circle
+
            :set-color
+           :set-circle-resolution
            :use-fill!
            :no-fill!))

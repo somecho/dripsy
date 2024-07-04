@@ -1,23 +1,6 @@
 (in-package #:dripsy)
 
 
-;; POINTS CACHE
-
-
-(defvar *unit-triangle-points* (polygon-points 3 1.0))
-(defvar *unit-square-points* (polygon-points 4 1.0))
-(defvar *unit-pentagon-points* (polygon-points 5 1.0))
-(defvar *unit-hexagon-points* (polygon-points 6 1.0))
-
-
-(defun get-unit-polygon-points (n)
-  (case n
-    (3 *unit-triangle-points*)
-    (4 *unit-square-points*)
-    (5 *unit-pentagon-points*)
-    (6 *unit-hexagon-points*)))
-
-
 (defun greater-than-two-p (n) (> n 2))
 (declaim (ftype (function ((satisfies greater-than-two-p) number)
                           points-array) polygon-points))
@@ -34,6 +17,20 @@ RADIUS."
           do (setf (aref vertices (+ (* i 3) 1)) (coerce y 'single-float))
           do (setf (aref vertices (+ (* i 3) 2)) 0.0))
     vertices))
+
+
+(defvar *unit-triangle-points* (polygon-points 3 1.0))
+(defvar *unit-square-points* (polygon-points 4 1.0))
+(defvar *unit-pentagon-points* (polygon-points 5 1.0))
+(defvar *unit-hexagon-points* (polygon-points 6 1.0))
+
+
+(defun get-unit-polygon-points (n)
+  (case n
+    (3 *unit-triangle-points*)
+    (4 *unit-square-points*)
+    (5 *unit-pentagon-points*)
+    (6 *unit-hexagon-points*)))
 
 
 (defun unit-polygon (n)

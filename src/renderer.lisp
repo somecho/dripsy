@@ -57,7 +57,13 @@
     :accessor mvp-matrix)
    (use-fill?
     :initform t
-    :accessor use-fill?)))
+    :accessor use-fill?)
+   (circle-resolution
+    :initform 32
+    :accessor circle-resolution)
+   (circle-cache
+    :initform (unit-polygon 32)
+    :accessor circle-cache)))
 
 
 (defmethod initialize-instance :after ((renderer renderer) &key)
@@ -183,6 +189,18 @@ geometries."
   (setf (use-fill? *renderer*) t))
 
 
+(declaim (ftype (function ((and fixnum greater-than-two-p))) set-circle-resolution))
+(defun set-circle-resolution (resolution)
+  "By default, a circle has 32 points. To specify a how many points the renderer
+will draw circles with, use this method."
+  (with-accessors ((circle-resolution circle-resolution)
+                   (circle-cache circle-cache))
+      *renderer*
+    (unless (eq resolution circle-resolution)
+      (setf circle-resolution resolution)
+      (setf circle-cache (unit-polygon resolution)))))
+
+
 ;; 2D Primitive Draw Calls
 
 
@@ -252,13 +270,13 @@ to its points is RADIUS."
 H."
   (before-render *renderer*)
   (let* ((rect-array `#(,(coerce x 'single-float)
-                       ,(coerce y 'single-float) 0.0
-                       ,(coerce (+ x w) 'single-float)
-                       ,(coerce y 'single-float) 0.0
-                       ,(coerce (+ x w) 'single-float)
-                       ,(coerce (+ y h) 'single-float) 0.0
-                       ,(coerce x 'single-float)
-                       ,(coerce (+ y h) 'single-float) 0.0)))
+                        ,(coerce y 'single-float) 0.0
+                        ,(coerce (+ x w) 'single-float)
+                        ,(coerce y 'single-float) 0.0
+                        ,(coerce (+ x w) 'single-float)
+                        ,(coerce (+ y h) 'single-float) 0.0
+                        ,(coerce x 'single-float)
+                        ,(coerce (+ y h) 'single-float) 0.0)))
     (write-array-buffer *renderer* rect-array)
     (if (use-fill? *renderer*)
         (gl:draw-arrays :triangle-fan 0 4)
@@ -266,6 +284,8 @@ H."
 
 
 (defun polygon (x y radius sides)
+  "Draws a polygon at (x,y) with SIDES being the number of sides it has. The
+radius is the length from the center to its points."
   (before-render *renderer*)
   (if (= sides 3)
       (eq-tri x y radius)
@@ -278,3 +298,15 @@ H."
         (if (use-fill? *renderer*)
             (gl:draw-arrays :triangle-fan 0 sides)
             (gl:draw-arrays :line-loop 0 sides)))))
+
+
+(defun circle (x y radius)
+  "Draws a circle at (x,y) with size of RADIUS."
+  (before-render *renderer*)
+  (let* ((points (circle-cache *renderer*))
+         (scaled (vec-mul-scalar points radius))
+         (transposed (transpose-points-array scaled x y)))
+    (write-array-buffer *renderer* transposed)
+    (if (use-fill? *renderer*)
+        (gl:draw-arrays :triangle-fan 0 (circle-resolution *renderer*))
+        (gl:draw-arrays :line-loop 0 (circle-resolution *renderer*)))))
