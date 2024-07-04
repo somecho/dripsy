@@ -12,6 +12,7 @@
            :on-resized
 
            ;; public draw API
+           :line
            :eq-tri
            :set-color
            :use-fill!
