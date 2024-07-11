@@ -101,11 +101,13 @@
            (%glfw:init)
            (%glfw:window-hint :context-version-major gl-version-major)
            (%glfw:window-hint :context-version-minor gl-version-minor)
+           (%glfw:window-hint :samples 4)
            (let ((window (%glfw:create-window width height title (cffi:null-pointer) (cffi:null-pointer))))
              (unless window (glfw:terminate))
              (setf glfw:*window* window)
              (glfw:make-context-current window)
              (gl:viewport 0 0 width height)
+             (gl:enable :multisample)
              (glfw:set-key-callback
               (cffi:defcallback key-callback :void ((window :pointer)
                                                     (key %glfw::key)
