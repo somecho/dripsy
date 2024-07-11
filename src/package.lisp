@@ -21,6 +21,8 @@
            :polygon
            :circle
            :save-screen
+           :clear
+           :background
 
            :set-color
            :set-circle-resolution

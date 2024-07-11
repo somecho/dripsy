@@ -341,3 +341,19 @@ radius is the length from the center to its points."
                             (cffi:mem-aref array '%gl:ubyte b)
                             (cffi:mem-aref array '%gl:ubyte a)) png)))
         (zpng:finish-png png)))))
+
+
+(defun clear ()
+  (gl:clear :color-buffer-bit :depth-buffer-bit))
+
+
+(defun background (r g b &optional (a 255.0))
+  (let ((red (coerce r 'single-float))
+        (green (coerce g 'single-float))
+        (blue (coerce b 'single-float))
+        (alpha (coerce a 'single-float)))
+    (gl:clear-color (/ red 255.0)
+                    (/ green 255.0)
+                    (/ blue 255.0)
+                    (/ alpha 255.0))
+    (gl:clear :color-buffer)))
