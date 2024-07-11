@@ -108,6 +108,8 @@
              (glfw:make-context-current window)
              (gl:viewport 0 0 width height)
              (gl:enable :multisample)
+             (gl:enable :blend)
+             (gl:blend-func :src-alpha :one-minus-src-alpha)
              (glfw:set-key-callback
               (cffi:defcallback key-callback :void ((window :pointer)
                                                     (key %glfw::key)
