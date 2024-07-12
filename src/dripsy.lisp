@@ -55,9 +55,7 @@
 
 
 (defun parse-blocks (body)
-  (let ((setup nil)
-        (draw nil)
-        (current-block :draw)
+  (let ((current-block :draw)
         (blocks nil))
     (setf blocks
           (loop for exp in body

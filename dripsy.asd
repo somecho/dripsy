@@ -3,7 +3,7 @@
   :author "Somē Cho <itssomicho@gmail.com>"
   :license  "MIT"
   :version "0.0.14"
-  :serial t
+  ;; :serial t
   :depends-on (#:alexandria
                #:cl-opengl
                #:cl-glfw3
@@ -16,6 +16,6 @@
                (:file "dripsy")
                (:file "geom")
                (:file "gl")
-               (:file "renderer")
+               (:file "renderer" :depends-on ("color"))
                (:file "shaders")
                (:file "color")))

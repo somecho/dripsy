@@ -115,7 +115,6 @@ already done."
           (gl:uniform-matrix-4fv mvp-loc mvp-matrix))))))
 
 
-(declaim (ftype (function (renderer points-array)) write-array-buffer))
 (defmethod write-array-buffer ((renderer renderer) data)
   "Uploads the vertex attributes position and color to OpenGL if the vertex
 position data has changed."
@@ -157,7 +156,7 @@ position data has changed."
 ;; Renderer State Functions
 
 
-(declaim (ftype (function (u8 u8 u8 u8)) set-color))
+(declaim (ftype (function (u8 u8 u8 &optional u8)) set-color))
 (defun set-color (r g b &optional (a 255.0))
   "Sets the color that the renderer will use to render the subsequent
 geometries."
@@ -248,7 +247,7 @@ to its points is RADIUS."
         (gl:draw-arrays :line-loop 0 3))))
 
 
-(declaim (ftype (function (gl-num gl-num gl-num gl-num gl-num gl-num) tri)))
+(declaim (ftype (function (gl-num gl-num gl-num gl-num gl-num gl-num)) tri))
 (defun tri (x1 y1 x2 y2 x3 y3)
   "Draws a triangle with points (x1,y1), (x2,y2) and (x3,y3)."
   (before-render *renderer*)
