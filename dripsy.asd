@@ -9,7 +9,8 @@
                #:cl-glfw3
                #:glkit
                #:arrows
-               #:zpng)
+               #:zpng
+               #:random-state)
   :pathname "src"
   :components ((:file "package")
                (:file "math")
@@ -18,4 +19,5 @@
                (:file "gl")
                (:file "renderer" :depends-on ("color"))
                (:file "shaders")
-               (:file "color")))
+               (:file "color")
+               (:file "noise")))

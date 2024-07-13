@@ -29,4 +29,7 @@
            :use-fill!
            :no-fill!
 
-           :half))
+           :half
+           :noise
+           :noise-seed
+           :noise-detail))
