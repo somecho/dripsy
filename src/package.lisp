@@ -1,17 +1,14 @@
 (defpackage #:dripsy
   (:use #:cl #:arrows)
   (:nicknames :drip)
-  (:export ;; public app vars
-           :make
+  (:export :make
            :width
            :height
            :frame-num
 
-           ;; app callbacks
            :on-key-pressed
            :on-resized
 
-           ;; public draw API
            :point
            :points
            :line
@@ -23,6 +20,11 @@
            :save-screen
            :clear
            :background
+           :pop-matrix
+           :push-matrix
+           :reset-matrix
+           :translate
+           :rotate
 
            :set-color
            :set-circle-resolution
