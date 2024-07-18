@@ -132,7 +132,10 @@
              (progn ,@(getf blocks :setup))
              (loop until (glfw:window-should-close-p window)
                    do (incf frame-num)
-                   do (draw ,app-name)
+                   do (handler-case
+                          (draw ,app-name)
+                        (error (e)
+                          (format t "Caught ~A~%" e)))
                    do (glfw:swap-buffers window)
                    do (glfw:poll-events))
              (glfw:destroy-window window)
