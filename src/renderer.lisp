@@ -16,62 +16,24 @@
 
 
 (defclass renderer ()
-  ((vertices
-    :initform #()
-    :accessor vertices)
-   (indices
-    :initform #()
-    :accessor indices)
-   (col
-    :initform #(1.0 1.0 1.0 1.0)
-    :accessor col)
-   (colors
-    :initform #()
-    :accessor colors)
-   (vertex-buffer-location
-    :initform nil
-    :accessor vertex-buffer-location)
-   (vertex-attrib-location
-    :initform nil
-    :accessor vertex-attrib-location)
-   (index-buffer-location
-    :initform nil
-    :accessor index-buffer-location)
-   (default-shader
-    :initform nil
-    :accessor default-shader)
-   (width
-    :initform nil
-    :initarg :width
-    :accessor width)
-   (height
-    :initform nil
-    :initarg :height
-    :accessor height)
-   (matrix-stack
-    :initform nil
-    :accessor matrix-stack)
-   (model-matrix
-    :initform (kit.glm:identity-matrix)
-    :accessor model-matrix)
-   (view-matrix
-    :initform (kit.glm:identity-matrix)
-    :accessor view-matrix)
-   (projection-matrix
-    :initform nil
-    :accessor projection-matrix)
-   (mvp-matrix
-    :initform nil
-    :accessor mvp-matrix)
-   (use-fill?
-    :initform t
-    :accessor use-fill?)
-   (circle-resolution
-    :initform 32
-    :accessor circle-resolution)
-   (circle-cache
-    :initform (unit-polygon 32)
-    :accessor circle-cache)))
+  ((vertices :initform #() :accessor vertices)
+   (indices :initform #() :accessor indices)
+   (col :initform #(1.0 1.0 1.0 1.0) :accessor col)
+   (colors :initform #() :accessor colors)
+   (vertex-buffer-location :initform nil :accessor vertex-buffer-location)
+   (vertex-attrib-location :initform nil :accessor vertex-attrib-location)
+   (index-buffer-location :initform nil :accessor index-buffer-location)
+   (default-shader :initform nil :accessor default-shader)
+   (width :initform nil :initarg :width :accessor width)
+   (height :initform nil :initarg :height :accessor height)
+   (matrix-stack :initform nil :accessor matrix-stack)
+   (model-matrix :initform (kit.glm:identity-matrix) :accessor model-matrix)
+   (view-matrix :initform (kit.glm:identity-matrix) :accessor view-matrix)
+   (projection-matrix :initform nil :accessor projection-matrix)
+   (mvp-matrix :initform nil :accessor mvp-matrix)
+   (use-fill? :initform t :accessor use-fill?)
+   (circle-resolution :initform 32 :accessor circle-resolution)
+   (circle-cache :initform (unit-polygon 32) :accessor circle-cache)))
 
 
 
@@ -94,26 +56,6 @@
 
 
 
-(defmethod bind-array-buffer ((renderer renderer))
-  "Binds the renderer's VBO if it isn't already bound."
-  (with-accessors ((vertex-buffer-location vertex-buffer-location))
-      renderer
-    (let ((current-array-buffer (gl:get-integer :array-buffer-binding) ))
-      (unless (eq vertex-buffer-location current-array-buffer)
-        (gl:bind-buffer :array-buffer vertex-buffer-location)))))
-
-
-
-(defmethod bind-vertex-array ((renderer renderer))
-  "Binds the renderer's VAO if it isn't already bound."
-  (with-accessors ((vertex-attrib-location vertex-attrib-location))
-      renderer
-    (let ((current-attrib (gl:get-integer :vertex-array-binding) ))
-      (unless (eq vertex-attrib-location current-attrib)
-        (gl:bind-vertex-array vertex-attrib-location)))))
-
-
-
 (defmethod use-default-shader ((renderer renderer))
   "Uses the renderer's default shaders and sets its default uniforms if it isn't
 already done."
@@ -125,34 +67,6 @@ already done."
         (gl:use-program default-shader))
       (let ((mvp-loc (gl:get-uniform-location default-shader "modelViewProjectionMatrix")))
         (gl:uniform-matrix-4fv mvp-loc mvp-matrix)))))
-
-
-
-(defmethod write-array-buffer ((renderer renderer) data)
-  "Uploads the vertex attributes position and color to OpenGL if the vertex
-position data has changed."
-  (with-accessors ((vertices vertices)
-                   (col col)
-                   (colors colors))
-      renderer
-    (unless (equalp data vertices)
-      (setf vertices data)
-      (setf colors (flat-repeat col (array-total-size data)))
-      (let ((vertex-data (interlace-arrays vertices colors 3 4)))
-        (gl:buffer-data :array-buffer :dynamic-draw
-                        (gen-gl-array-buffer vertex-data))))))
-
-
-
-(defmethod write-index-buffer ((renderer renderer) data)
-  (with-accessors ((indices indices)
-                   (index-buffer-location index-buffer-location))
-      renderer
-    (unless (equalp data indices)
-      (setf indices data)
-      (gl:bind-buffer :element-array-buffer index-buffer-location)
-      (gl:buffer-data :element-array-buffer :dynamic-draw
-                      (gen-gl-array-buffer data :type :unsigned-int)))))
 
 
 

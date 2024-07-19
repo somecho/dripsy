@@ -15,7 +15,7 @@
                (:file "color")
                (:file "dripsy")
                (:file "geom" :depends-on ("math"))
-               (:file "gl")
+               (:file "gl" :depends-on ("renderer"))
                (:file "math")
                (:file "noise")
                (:file "primitives" :depends-on ("renderer" "math"))
