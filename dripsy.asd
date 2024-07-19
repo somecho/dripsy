@@ -20,4 +20,5 @@
                (:file "renderer" :depends-on ("color"))
                (:file "shaders")
                (:file "color")
+               (:file "primitives" :depends-on ("renderer" "math"))
                (:file "noise")))
