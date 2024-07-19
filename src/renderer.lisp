@@ -1,13 +1,18 @@
+;;;; RENDERER
+;;;; This file contains the renderer class, which handles OpenGL state for
+;;;; drawing to the screen.
+
 (in-package #:dripsy)
 
+;;; RENDERER CLASS
 
-;; RENDERER CLASS
 
 
 (declaim (type (or null renderer) *renderer*))
 (defvar *renderer* nil
   "The global renderer instance used by Dripsy to draw in the current GL
   context. It is initialized when an instance of the Dripsy app is created.")
+
 
 
 (defclass renderer ()
@@ -69,6 +74,7 @@
     :accessor circle-cache)))
 
 
+
 (defmethod initialize-instance :after ((renderer renderer) &key)
   (with-accessors ((vertex-buffer-location vertex-buffer-location)
                    (vertex-attrib-location vertex-attrib-location)
@@ -87,6 +93,7 @@
     (setf vertex-attrib-location (gl:gen-vertex-array))))
 
 
+
 (defmethod bind-array-buffer ((renderer renderer))
   "Binds the renderer's VBO if it isn't already bound."
   (with-accessors ((vertex-buffer-location vertex-buffer-location))
@@ -96,6 +103,7 @@
         (gl:bind-buffer :array-buffer vertex-buffer-location)))))
 
 
+
 (defmethod bind-vertex-array ((renderer renderer))
   "Binds the renderer's VAO if it isn't already bound."
   (with-accessors ((vertex-attrib-location vertex-attrib-location))
@@ -103,6 +111,7 @@
     (let ((current-attrib (gl:get-integer :vertex-array-binding) ))
       (unless (eq vertex-attrib-location current-attrib)
         (gl:bind-vertex-array vertex-attrib-location)))))
+
 
 
 (defmethod use-default-shader ((renderer renderer))
@@ -116,6 +125,7 @@ already done."
         (gl:use-program default-shader))
       (let ((mvp-loc (gl:get-uniform-location default-shader "modelViewProjectionMatrix")))
         (gl:uniform-matrix-4fv mvp-loc mvp-matrix)))))
+
 
 
 (defmethod write-array-buffer ((renderer renderer) data)
@@ -133,6 +143,7 @@ position data has changed."
                         (gen-gl-array-buffer vertex-data))))))
 
 
+
 (defmethod write-index-buffer ((renderer renderer) data)
   (with-accessors ((indices indices)
                    (index-buffer-location index-buffer-location))
@@ -142,6 +153,7 @@ position data has changed."
       (gl:bind-buffer :element-array-buffer index-buffer-location)
       (gl:buffer-data :element-array-buffer :dynamic-draw
                       (gen-gl-array-buffer data :type :unsigned-int)))))
+
 
 
 (defmethod before-render ((renderer renderer))
@@ -156,7 +168,9 @@ position data has changed."
     (gl:vertex-attrib-pointer 1 4 :float :false stride (* 3  fsize))))
 
 
-;; Renderer State Functions
+
+;;; RENDERER STATE FUNCTIONS
+
 
 
 (declaim (ftype (function (u8 u8 u8 &optional u8)) set-color))
@@ -181,9 +195,11 @@ geometries."
                           (gen-gl-array-buffer vertex-data)))))))
 
 
+
 (defun no-fill ()
   "Tells the renderer to draw shapes without fill."
   (setf (use-fill? *renderer*) nil))
+
 
 
 (defun use-fill ()
@@ -191,7 +207,7 @@ geometries."
   (setf (use-fill? *renderer*) t))
 
 
-;; (declaim (ftype (function ((and fixnum greater-than-two-p))) set-circle-resolution))
+
 (defun set-circle-resolution (resolution)
   "By default, a circle has 32 points. To specify a how many points the renderer
 will draw circles with, use this method."
@@ -201,6 +217,8 @@ will draw circles with, use this method."
     (unless (eq resolution circle-resolution)
       (setf circle-resolution resolution)
       (setf circle-cache (unit-polygon resolution)))))
+
+
 
 (defun save-screen (w h filename)
   (let* ((num-pixels (* w h))
@@ -233,9 +251,11 @@ will draw circles with, use this method."
         (zpng:finish-png png)))))
 
 
+
 (defun clear ()
   "Clears the color buffer bit and the depth buffer bit"
   (gl:clear :color-buffer-bit :depth-buffer-bit))
+
 
 
 (defun background (r g b &optional (a 255.0))
@@ -250,58 +270,3 @@ will draw circles with, use this method."
                     (/ alpha 255.0))
     (gl:clear :color-buffer)))
 
-
-;; TRANSFORMATIONS
-
-
-(defun translate (x y &optional (z 0.0))
-  "Translates all subsequent draw calls by x,y and optionally z. Translation is
-cumulative. Be sure to push/pop or reset the matrix."
-  (let* ((x (coerce x 'single-float))
-         (y (coerce y 'single-float))
-         (z (coerce z 'single-float))
-         (transl-mat (kit.glm:translate* x y z)))
-    (with-accessors ((mvp-matrix mvp-matrix))
-        *renderer*
-      (setf mvp-matrix (kit.glm:matrix* mvp-matrix transl-mat)))))
-
-
-(defun rotate (theta)
-  "Rotates all subsequent draw calls by THETA around the Z-axis. Rotation is
-cumulative. Be sure to push/pop or reset the matrix."
-  (let* ((theta (coerce theta 'single-float))
-         (transl-mat (kit.glm:rotate* 0.0 0.0 theta)))
-    (with-accessors ((mvp-matrix mvp-matrix))
-        *renderer*
-      (setf mvp-matrix (kit.glm:matrix* mvp-matrix transl-mat)))))
-
-
-(defun push-matrix ()
-  "Pushes the current MVP matrix onto an internal stack."
-  (with-accessors ((mvp-matrix mvp-matrix)
-                   (matrix-stack matrix-stack))
-      *renderer*
-    (setf matrix-stack (cons matrix-stack mvp-matrix))))
-
-
-(defun pop-matrix ()
-  "Sets the last MVP matrix in the matrix stack as the current MVP matrix and
-removes it from the stack."
-  (with-accessors ((mvp-matrix mvp-matrix)
-                   (matrix-stack matrix-stack))
-      *renderer*
-    (let ((last-mat (cdr matrix-stack)))
-      (setf mvp-matrix last-mat)
-      (setf matrix-stack (car matrix-stack)))))
-
-
-(defun reset-matrix ()
-  "Empties the matrix stack and reverts the MVP matrix to the default matrix."
-  (with-accessors ((model-matrix model-matrix)
-                   (view-matrix view-matrix)
-                   (projection-matrix projection-matrix)
-                   (mvp-matrix mvp-matrix)
-                   (matrix-stack matrix-stack))
-      *renderer*
-    (setf matrix-stack nil)
-    (setf mvp-matrix (kit.glm:matrix* model-matrix view-matrix projection-matrix))))
