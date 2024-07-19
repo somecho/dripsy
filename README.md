@@ -41,8 +41,12 @@ of an involved process. Follow the installation steps dilligently and don't forg
 
 ### Installing Dripsy
 
-Dripsy is currently manual install only. But don't worry, for starts, just clone the repo anywhere you like and that's it!
+Dripsy is currently manual install only. But don't worry, for starts, just clone the repo anywhere you like and that's it! If you use Quicklisp (recommended), you can do this:
 
+```sh
+cd ~/quicklisp/local-projects
+git clone https://github.com/somecho/dripsy
+```
 
 ## Getting started
 
@@ -54,6 +58,8 @@ You can load the library by evaluating these expressions:
 ```
 
 > Explanation for new Common Lisp users: ASDF is a sort of *build system library* common lisp that comes packaged with the SBCL implementation. It gives us a way to load *systems* (libraries as we would call it) so that we can use them. In the snippet, we load the system definition file (it ends with `.asd`). Now our REPL will know what Dripsy is. We can then load it with `asdf:load-system` or `ql:quickload` (if you have Quicklisp).
+
+If you've installed via Quicklisp, you can just do `(ql:quickload :dripsy)`.
 
 ### First steps
 
@@ -112,8 +118,6 @@ Note that you will have to use the `:draw` keyword to tell Dripsy where the draw
 ## Further Steps
 
 Keep an eye out on this repo as examples will be added as features get developed. Feel free to create PR's to submit examples if you have tried it out! 
-
-Once Dripsy reaches a reliable state, it will be released on Quicklisp.
 
 ---
 

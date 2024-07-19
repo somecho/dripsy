@@ -28,8 +28,8 @@
 
            :set-color
            :set-circle-resolution
-           :use-fill!
-           :no-fill!
+           :use-fill
+           :no-fill
 
            :half
            :noise
