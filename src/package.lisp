@@ -37,13 +37,19 @@
 
            ;primitives
            :point
-           :points
+           :point*
            :line
+           :line*
            :eq-tri
+           :eq-tri*
            :tri
+           :tri*
            :rect
+           :rect*
            :polygon
+           :polygon*
            :circle
+           :circle*
            :bezier
            :bezier*
 
