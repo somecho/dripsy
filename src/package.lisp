@@ -20,7 +20,8 @@
            :vecs/
            ;interpolation
            :bezier-lerp
-           :bezier-lerp*))
+           :bezier-lerp*
+           :vlerp))
 
 (defpackage #:dripsy
   (:use #:cl #:arrows)

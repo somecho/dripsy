@@ -34,3 +34,13 @@ points."
                 `#(,x1 ,y1)
                 `#(,x2 ,y2)
                 `#(,x3 ,y3) v))
+
+
+
+;;;
+
+
+
+(defun vlerp (v1 v2 v)
+  "Interpolates linearly between vectors V1 and V2 by V (0-1)."
+  (vec+ (vecs* v1 (- 1  v)) (vecs* v2 v)))
