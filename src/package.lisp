@@ -31,7 +31,6 @@
            :width
            :height
            :frame-num
-
            :on-key-pressed
            :on-resized
 
@@ -53,20 +52,23 @@
            :bezier
            :bezier*
 
+           ;renderer
            :save-screen
            :clear
            :background
+           :set-color
+           :set-circle-resolution
+           :use-fill
+           :no-fill
+
+           ;transformations
            :pop-matrix
            :push-matrix
            :reset-matrix
            :translate
            :rotate
 
-           :set-color
-           :set-circle-resolution
-           :use-fill
-           :no-fill
-
+           ;noise
            :noise
            :noise-seed
            :noise-detail))

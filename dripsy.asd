@@ -2,7 +2,7 @@
   :description "Creative Coding Framework"
   :author "Somē Cho <itssomicho@gmail.com>"
   :license  "MIT"
-  :version "0.1.0"
+  :version "0.1.1"
   :depends-on (#:alexandria
                #:cl-opengl
                #:cl-glfw3
