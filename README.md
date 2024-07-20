@@ -67,7 +67,8 @@ A simple Dripsy application looks like this:
 
 ```lisp
 (drip:make hello-world
-    (drip:circle (drip:half drip:width) (drip:half drip:height) 20))
+    (drip:background 0 0 0)
+    (drip:polygon (* 0.5 drip:width) (* 0.5 drip:height) 200 9))
 
 (make-instance 'hello-world)
 ```
@@ -75,7 +76,7 @@ A simple Dripsy application looks like this:
 Take a look:
 
 <div align="center">
-    <img src="./documentation/circle.png"/>
+    <img src="./documentation/example.png"/>
 </div>
 
 #### What's with all the `drip:`? 
@@ -89,16 +90,6 @@ Take a look:
 ```
 > Explanation: What we've basically done here is created a new namespace to use Dripsy in. The `(:use :cl :dripsy)` expression tells the REPL that we will be using the Common Lisp standard library as well as Dripsy in this namespace. Now the REPL will know where to look for our functions and variables. 
 
-With this, our circle sketch looks like this:
-
-```lisp
-(make hello-world 
-    (set-color 0 0 255)
-    (circle (half width) (half height) 20))
-
-(make-instance 'hello-world)
-```
-
 ### The Setup method
 
 Many frameworks will have a *setup* function, there things get called once before the draw loop starts. In Dripsy, the setup function is specified with the `:setup` keyword.
@@ -108,7 +99,7 @@ Many frameworks will have a *setup* function, there things get called once befor
     :setup
     (print "This gets printed once")
     :draw
-    (circle (half width) (half height) 50)))
+    (circle (* 0.5 width) (* 0.5 height) 250)))
 
 (make-instance 'hello-world :width 800 :height 800)
 ```
@@ -122,5 +113,4 @@ Keep an eye out on this repo as examples will be added as features get developed
 ---
 
 © 2024 Somē Cho
-
 
