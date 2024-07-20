@@ -40,5 +40,4 @@ RADIUS."
 (defun triangle-points (&optional (size 1.0))
   "Returns a flat array of points representing the 3 sides of a triangle with a
 radius of SIZE, radius being the length from the center to the point."
-  (vec-mul-scalar *unit-triangle-points* size))
-
+  (vecs* *unit-triangle-points* size))

@@ -53,7 +53,7 @@ to its points is RADIUS."
   (with-accessors ((use-fill? use-fill?))
       *renderer*
     (before-render *renderer*)
-    (let* ((scaled (vec-mul-scalar *unit-triangle-points* radius))
+    (let* ((scaled (vecs* *unit-triangle-points* radius))
            (transposed (transpose-points-array scaled x y)))
       (write-array-buffer *renderer* transposed))
     (if use-fill?
@@ -108,7 +108,7 @@ radius is the length from the center to its points."
       (let* ((unit-points-array (if (< sides 7)
                                     (get-unit-polygon-points sides)
                                     (unit-polygon sides)))
-             (scaled (vec-mul-scalar unit-points-array radius))
+             (scaled (vecs* unit-points-array radius))
              (transposed (transpose-points-array scaled x y)))
         (write-array-buffer *renderer* transposed)
         (if (use-fill? *renderer*)
@@ -121,7 +121,7 @@ radius is the length from the center to its points."
   "Draws a circle at (x,y) with size of RADIUS."
   (before-render *renderer*)
   (let* ((points (circle-cache *renderer*))
-         (scaled (vec-mul-scalar points radius))
+         (scaled (vecs* points radius))
          (transposed (transpose-points-array scaled x y)))
     (write-array-buffer *renderer* transposed)
     (if (use-fill? *renderer*)

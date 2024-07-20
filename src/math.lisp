@@ -36,22 +36,6 @@
 ;; VECTOR/ARRAY OPERATIONS
 
 
-(defun vec-mul-scalar (vec f)
-  "Returns an array of all elements in VEC multiplied by F"
-  (declare (type (simple-array (or single-float fixnum)) vec))
-  (declare (type (or float fixnum) f))
-  (let* ((vec-length (length vec))
-         (output (make-array vec-length)))
-    (loop for i from 0 below vec-length
-          do (setf (aref output i) (* f (aref vec i))))
-    output))
-
-
-;; (declaim (ftype (function (points-array gl-num gl-num (or gl-num null))
-;;                           points-array)
-;;                 transpose-points-array))
-
-
 (defun transpose-points-array (array x y &optional (z 0))
   "Returns a new points array where the x, y and z components are transposed by
 the arguments X, Y and Z."
