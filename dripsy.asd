@@ -20,7 +20,8 @@
                (:file "math/vec")
                (:file "math/interpolation" :depends-on ("math/vec"))
                (:file "noise")
-               (:file "primitives" :depends-on ("renderer" "math"))
+               (:file "primitives"
+                :depends-on ("renderer" "math" "math/interpolation"))
                (:file "renderer" :depends-on ("color"))
                (:file "shaders")
                (:file "transformations" :depends-on ("renderer"))))

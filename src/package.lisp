@@ -25,7 +25,8 @@
 (defpackage #:dripsy
   (:use #:cl #:arrows)
   (:nicknames :drip)
-  (:import-from :dripsy.math :vecs*)
+  (:import-from :dripsy.math :vecs*
+                             :bezier-lerp)
   (:export :make
            :width
            :height
@@ -34,6 +35,7 @@
            :on-key-pressed
            :on-resized
 
+           ;primitives
            :point
            :points
            :line
@@ -42,6 +44,9 @@
            :rect
            :polygon
            :circle
+           :bezier
+           :bezier*
+
            :save-screen
            :clear
            :background
@@ -56,7 +61,6 @@
            :use-fill
            :no-fill
 
-           :half
            :noise
            :noise-seed
            :noise-detail))

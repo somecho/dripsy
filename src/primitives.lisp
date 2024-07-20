@@ -13,6 +13,7 @@
 ;;; - rect
 ;;; - polygon
 ;;; - circle
+;;; - bezier
 
 (defun point (x y &optional (z 0.0))
   "Draws a single point at (x,y)."
@@ -127,3 +128,29 @@ radius is the length from the center to its points."
     (if (use-fill? *renderer*)
         (gl:draw-arrays :triangle-fan 0 (circle-resolution *renderer*))
         (gl:draw-arrays :line-loop 0 (circle-resolution *renderer*)))))
+
+
+
+(defun bezier (x0 y0 x1 y1 x2 y2 x3 y3 &optional (res 32))
+  "Draws a cubic bezier curve from point (x0, y0) to (x3,y3) with control points
+(x1, y1) and (x2, y2). The default resolution of the line is 32."
+  (let ((vertices (loop for i from 0 to res
+                        for v = (coerce (/ i res) 'single-float)
+                        for p = (bezier-lerp x0 y0
+                                             x1 y1
+                                             x2 y2
+                                             x3 y3
+                                             v)
+                        collect (aref p 0)
+                        collect (aref p 1))))
+    (apply #'line vertices)))
+
+
+
+(defun bezier* (p0 p1 p2 p3 &optional (res 32))
+  "Draws a cubic bezier curve from P0 to P3 with control points P1 and P2, where
+each point is a 2D simple-vector. The default resolution of the line is 32."
+  (bezier (aref p0 0) (aref p0 1)
+          (aref p1 0) (aref p1 1)
+          (aref p2 0) (aref p2 1)
+          (aref p3 0) (aref p3 1) res))
