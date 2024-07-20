@@ -18,6 +18,7 @@
                (:file "gl" :depends-on ("renderer"))
                (:file "math")
                (:file "math/vec")
+               (:file "math/interpolation" :depends-on ("math/vec"))
                (:file "noise")
                (:file "primitives" :depends-on ("renderer" "math"))
                (:file "renderer" :depends-on ("color"))

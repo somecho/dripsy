@@ -56,4 +56,7 @@
            :vecs+
            :vecs-
            :vecs*
-           :vecs/))
+           :vecs/
+           ;interpolation
+           :bezier-lerp
+           :bezier-lerp*))
